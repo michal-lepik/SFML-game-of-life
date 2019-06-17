@@ -16,6 +16,7 @@ class Board
 	sf::RenderWindow window;
 
 	int countNeighbours(int row, int col);
+	vector<Cell> generateEmptyBoard();
 	vector<Cell> generateNewBoard();
 
 public:
