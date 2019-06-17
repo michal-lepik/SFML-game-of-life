@@ -6,16 +6,9 @@ Board::Board(int width, int height, int cellSize)
 	this->height = height;
 	this->cellSize = cellSize;
 
-	window.create(sf::VideoMode(width*cellSize, height*cellSize), "Conway's Game of Life", sf::Style::Titlebar | sf::Style::Close);
+	this->gameBoard = generateEmptyBoard();
 
-	for (int y = 0; y < height; y++)
-	{
-		for (int x = 0; x < width; x++)
-		{
-			Cell newCell(x, y, cellSize);
-			this->gameBoard.push_back(newCell);
-		}
-	}
+	window.create(sf::VideoMode(width*cellSize, height*cellSize), "Conway's Game of Life", sf::Style::Titlebar | sf::Style::Close);
 }
 
 Board::~Board() {}
@@ -24,11 +17,11 @@ int Board::countNeighbours(int row, int col)
 {
 	int count = 0;
 
-	for (int y = max(0, col - 1); y <= min(this->height - 1, col + 1); y++)
+	for (int y = max(0, col - 1); y <= min(height - 1, col + 1); y++)
 	{
-		for (int x = max(0, row - 1); x <= min(this->width - 1, row + 1); x++)
+		for (int x = max(0, row - 1); x <= min(width - 1, row + 1); x++)
 		{
-			if ((x != row || y != col) && this->gameBoard[x + y * width].getIsAlive())
+			if ((x != row || y != col) && gameBoard[x + y * width].getIsAlive())
 			{
 				count++;
 			}
@@ -40,22 +33,21 @@ int Board::countNeighbours(int row, int col)
 
 vector<Cell> Board::generateEmptyBoard()
 {
-	vector<Cell> newBoard = gameBoard;
+	vector<Cell> newBoard;
 
 	for (int y = 0; y < height; y++)
 	{
 		for (int x = 0; x < width; x++)
 		{
-
-			newBoard[x + y * width].kill();
-
+			Cell newCell(x, y, cellSize);
+			newBoard.push_back(newCell);
 		}
 	}
 
 	return newBoard;
 }
 
-vector<Cell> Board::generateNewBoard()
+vector<Cell> Board::generateNextBoard()
 {
 	vector<Cell> newBoard = gameBoard;
 
@@ -128,7 +120,6 @@ void Board::play()
 					gameBoard = generateRandomBoard();
 				}
 
-
 			case sf::Event::MouseButtonPressed:
 				if (event.mouseButton.button == sf::Mouse::Left && !isPlaying)
 				{
@@ -145,7 +136,7 @@ void Board::play()
 
 		if (isPlaying)
 		{
-			gameBoard = generateNewBoard();
+			gameBoard = generateNextBoard();
 			sf::sleep(sf::milliseconds(200));
 		}
 
