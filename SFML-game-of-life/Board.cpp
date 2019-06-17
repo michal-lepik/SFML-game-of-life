@@ -79,6 +79,26 @@ vector<Cell> Board::generateNewBoard()
 	return newBoard;
 }
 
+vector<Cell> Board::generateRandomBoard()
+{
+	vector<Cell> newBoard = generateEmptyBoard();
+
+	srand(time(NULL));
+
+	for (int y = 0; y < height; y++)
+	{
+		for (int x = 0; x < width; x++)
+		{
+			if ((rand() % 100) < 20)
+			{
+				newBoard[x + y * width].born();
+			}
+		}
+	}
+
+	return newBoard;
+}
+
 void Board::play()
 {
 	while (window.isOpen())
@@ -101,6 +121,11 @@ void Board::play()
 				{
 					isPlaying = false;
 					gameBoard = generateEmptyBoard();
+				}
+				else if (event.key.code == sf::Keyboard::R)
+				{
+					isPlaying = false;
+					gameBoard = generateRandomBoard();
 				}
 
 
