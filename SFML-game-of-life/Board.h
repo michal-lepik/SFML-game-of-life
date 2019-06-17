@@ -21,7 +21,7 @@ class Board
 	int countNeighbours(int row, int col);
 
 	vector<Cell> generateEmptyBoard();
-	vector<Cell> generateNewBoard();
+	vector<Cell> generateNextBoard();
 	vector<Cell> generateRandomBoard();
 
 public:
